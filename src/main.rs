@@ -1,3 +1,4 @@
+#![windows_subsystem = "windows"]
 use eframe::egui;
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -67,6 +68,17 @@ impl AppState {
         self.new_client_ip.clear();
         self.new_client_password.clear();
     }
+
+    fn load_selected_client(&mut self) {
+        if let Some(index) = self.selected_client {
+            if index < self.clients.len() {
+                let client = &self.clients[index];
+                self.new_client_name = client.name.clone();
+                self.new_client_ip = client.ip.clone();
+                self.new_client_password = client.password.clone();
+            }
+        }
+    }
 }
 
 impl eframe::App for AppState {
@@ -82,6 +94,7 @@ impl eframe::App for AppState {
                     if ui.button("Edit").clicked() {
                         if self.selected_client.is_some() {
                             self.mode = AppMode::Editing;
+                            self.load_selected_client();
                             ui.close_menu();
                         } else {
                             self.error_message = Some("Please select a target to edit.".to_string());
@@ -186,11 +199,6 @@ impl eframe::App for AppState {
                 AppMode::Editing => {
                     if let Some(index) = self.selected_client {
                         if index < self.clients.len() {
-                            let client = &self.clients[index];
-                            self.new_client_name = client.name.clone();
-                            self.new_client_ip = client.ip.clone();
-                            self.new_client_password = client.password.clone();
-
                             ui.label("Edit Client:");
 
                             ui.horizontal(|ui| {
@@ -267,6 +275,7 @@ impl eframe::App for AppState {
 }
 
 fn main() {
+    println!("Remote Desktop Manager is running.");
     let native_options = eframe::NativeOptions {
         window_builder: Some(Box::new(|builder| {
             builder
