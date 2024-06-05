@@ -1,8 +1,10 @@
 #![windows_subsystem = "windows"]
+
 use eframe::egui;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::process::Command;
+use arboard::Clipboard;
 
 #[derive(Serialize, Deserialize, Clone)]
 struct Client {
@@ -55,6 +57,9 @@ impl AppState {
     }
 
     fn connect_to_client(&self, client: &Client) {
+        let mut clipboard = Clipboard::new().unwrap();
+        clipboard.set_text(&client.password).unwrap();
+
         Command::new("mstsc")
             .arg("/v")
             .arg(&client.ip)
@@ -112,7 +117,7 @@ impl eframe::App for AppState {
                         std::process::exit(0);
                     }
                 });
-                ui.menu_button("About", |ui| {
+                ui.menu_button("Help", |ui| {
                     if ui.button("About").clicked() {
                         self.mode = AppMode::About;
                         ui.close_menu();
