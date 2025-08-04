@@ -21,6 +21,10 @@ fn main() {
     let _ = eframe::run_native(
         "Remote Desktop Manager",
         native_options,
-        Box::new(|_cc| Box::new(AppState::new())),
+        Box::new(|cc| {
+            let app = AppState::new();
+            cc.egui_ctx.set_visuals(egui::Visuals::dark());
+            Box::new(app)
+        }),
     );
 }
