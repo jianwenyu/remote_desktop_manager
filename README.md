@@ -6,8 +6,6 @@ A simple program that to store your IP and password for remote desktop login.
 - Remove client
 - Modify client
 - Encrypt for the saved client list
-  
-## To Do
 - Add master password to program login
 
 ## Open to discussion
