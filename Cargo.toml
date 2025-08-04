@@ -12,6 +12,8 @@ arboard = "3.4.0"
 aes-gcm = "0.10.1"
 aes = "0.8.2"
 rand = "0.8.5"
+argon2 = "0.5.3"
+rfd = "0.14.1"
 
 [profile.release]
 panic = "abort"

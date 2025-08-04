@@ -5,7 +5,7 @@ mod client;
 mod encryption;
 
 use app::AppState;
-use eframe::egui;
+
 use eframe::NativeOptions;
 
 fn main() {
