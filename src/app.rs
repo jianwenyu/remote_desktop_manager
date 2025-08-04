@@ -251,31 +251,30 @@ impl AppState {
             egui::ScrollArea::vertical().show(ui, |ui| {
                 let clients = self.clients.clone();
                 for (index, client) in clients.iter().enumerate() {
-                    ui.horizontal(|ui| {
-                        // Left-aligned, expanding client name
-                        ui.with_layout(egui::Layout::left_to_right(egui::Align::Center).with_main_wrap(true), |ui| {
-                            if ui.selectable_value(&mut self.selected_client, Some(index), egui::RichText::new(&client.name).heading()).clicked() {
-                                self.mode = AppMode::Normal;
+                                        ui.horizontal(|ui| {
+                        // Client name (selectable)
+                        if ui.selectable_value(&mut self.selected_client, Some(index), egui::RichText::new(&client.name).heading()).clicked() {
+                            self.mode = AppMode::Normal;
+                        }
+                        // Connect button after name
+                        if ui.button("▶Connect").clicked() { 
+                            if let Err(e) = self.connect_to_client(&client) {
+                                self.error_message = Some(format!("Failed to connect: {}", e));
                             }
-                        });
+                        }
 
-                        // Right-aligned buttons
-                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                            if ui.button("🗑").clicked() {
-                                self.selected_client = Some(index);
-                                self.mode = AppMode::Removing;
-                            }
-                            if ui.button("✏").clicked() {
-                                self.selected_client = Some(index);
-                                self.mode = AppMode::Editing;
-                                self.load_selected_client();
-                            }
-                            if ui.button("▶ Connect").clicked() { // Changed to icon only
-                                if let Err(e) = self.connect_to_client(&client) {
-                                    self.error_message = Some(format!("Failed to connect: {}", e));
-                                }
-                            }
-                        });
+                        // // Right-aligned buttons
+                        // ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        //     if ui.button("🗑").clicked() {
+                        //         self.selected_client = Some(index);
+                        //         self.mode = AppMode::Removing;
+                        //     }
+                        //     if ui.button("✏").clicked() {
+                        //         self.selected_client = Some(index);
+                        //         self.mode = AppMode::Editing;
+                        //         self.load_selected_client();
+                        //     }
+                        // });
                     });
                 }
             });
